@@ -6,10 +6,10 @@ using CAFU.KeyValueStore.Utility;
 using ExtraLinq;
 using UnityEngine;
 
-namespace CAFU.KeyValueStore.Data.DataStore {
-
-    public interface IKeyValueDataStore : IDataStore {
-
+namespace CAFU.KeyValueStore.Data.DataStore
+{
+    public interface IKeyValueDataStore : IDataStore
+    {
         /// <summary>
         /// Save dictionary data into file
         /// </summary>
@@ -34,14 +34,13 @@ namespace CAFU.KeyValueStore.Data.DataStore {
         TEntity GetEntity<TEntity>(string key) where TEntity : class, IEntity;
 
         void SetEntity<TEntity>(string key, TEntity entity) where TEntity : class, IEntity;
-
     }
-    
-    public abstract class KeyValueDataStore : IKeyValueDataStore {
-        
-        [Serializable]
-        class KeyValueDictionary : SerializableDictionary<string, string> {
 
+    public abstract class KeyValueDataStore : IKeyValueDataStore
+    {
+        [Serializable]
+        class KeyValueDictionary : SerializableDictionary<string, string>
+        {
         }
 
         private KeyValueDictionary dictionary = new KeyValueDictionary();
@@ -53,10 +52,12 @@ namespace CAFU.KeyValueStore.Data.DataStore {
         /// <returns></returns>
         protected abstract string CreatePath();
 
-        public void Load() {
+        public void Load()
+        {
             var path = this.CreatePath();
 
-            if (!File.Exists(path)) {
+            if (!File.Exists(path))
+            {
                 this.dictionary.Clear();
                 return;
             }
@@ -67,10 +68,12 @@ namespace CAFU.KeyValueStore.Data.DataStore {
             this.dictionary.DeserializeSync();
         }
 
-        public void Save() {
+        public void Save()
+        {
             var path = this.CreatePath();
 
-            if (!Directory.Exists(Path.GetDirectoryName(path))) {
+            if (!Directory.Exists(Path.GetDirectoryName(path)))
+            {
                 Directory.CreateDirectory(Path.GetDirectoryName(path));
             }
 
@@ -78,18 +81,22 @@ namespace CAFU.KeyValueStore.Data.DataStore {
             File.WriteAllText(path, JsonUtility.ToJson(this.dictionary));
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             var path = this.CreatePath();
 
-            if (File.Exists(path)) {
+            if (File.Exists(path))
+            {
                 File.Delete(path);
             }
 
             this.dictionary.Clear();
         }
 
-        public TEntity GetEntity<TEntity>(string key) where TEntity : class, IEntity {
-            if (!this.dictionary.ContainsKey(key)) {
+        public TEntity GetEntity<TEntity>(string key) where TEntity : class, IEntity
+        {
+            if (!this.dictionary.ContainsKey(key))
+            {
                 return default(TEntity);
             }
 
@@ -97,31 +104,32 @@ namespace CAFU.KeyValueStore.Data.DataStore {
             return JsonUtility.FromJson<TEntity>(value);
         }
 
-        public void SetEntity<TEntity>(string key, TEntity entity) where TEntity : class, IEntity {
+        public void SetEntity<TEntity>(string key, TEntity entity) where TEntity : class, IEntity
+        {
             var value = JsonUtility.ToJson(entity);
             this.dictionary[key] = value;
         }
-
     }
 
     // 毎回DataStoreをimplementするのが面倒
-    public class DefaultKeyValueDataStore : KeyValueDataStore {
-
+    public class DefaultKeyValueDataStore : KeyValueDataStore
+    {
         private string savePath;
 
-        public DefaultKeyValueDataStore() {
+        public DefaultKeyValueDataStore()
+        {
         }
-        
-        public void Initialize(string savePath) {
+
+        public void Initialize(string savePath)
+        {
             this.savePath = savePath;
         }
 
-        protected override string CreatePath() {
+        protected override string CreatePath()
+        {
             if (this.savePath.IsNullOrEmpty())
                 throw new InvalidOperationException("Please initialize save path");
             return this.savePath;
         }
-
     }
-
 }
