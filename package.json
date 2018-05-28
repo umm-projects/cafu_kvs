@@ -1,0 +1,30 @@
+{
+  "name": "@umm/cafu_kvs",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/umm-projects/cafu_kvs",
+  "bugs": {
+    "url": "https://github.com/umm-projects/cafu_kvs/issues"
+  },
+  "scripts": {
+    "umm:init": "umm-init",
+    "umm:generate_assembly_definition": "umm-generate_assembly_definition",
+    "umm:module:install": "umm-module-install",
+    "umm:module:uninstall": "umm-module-uninstall",
+    "postinstall": "npm run --silent umm:module:install",
+    "postuninstall": "npm run --silent umm:module:uninstall"
+  },
+  "author": "Takuma Maruyama",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:umm-projects/cafu_kvs"
+  },
+  "files": [
+    "Assets"
+  ],
+  "dependencies": {
+    "@umm/scripts": "umm-projects/scripts#^1.0.0"
+  },
+  "devDependencies": {}
+}
