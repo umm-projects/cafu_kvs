@@ -2,11 +2,11 @@
 
 ## What
 
-* 
+- Simple key value data store system
 
 ## Requirement
 
-* 
+- cafu\_core
 
 ## Install
 
@@ -16,7 +16,19 @@ yarn add "umm-projects/cafu_kvs#^1.0.0"
 
 ## Usage
 
-* 
+```
+var savePath = UnityEngine.Application.persistentDataPath + "/default.kv";
+var repository = new DefaultKeyValueRepository.Factory().Create(savePath);
+
+// Load & Get
+repository.Load();
+var entity = repository.GetEntity<SampleEntity>("key");
+
+// Set & Save
+repository.SetEntity<SampleEntity>("key", entity);
+repository.Save();
+
+```
 
 ## License
 
