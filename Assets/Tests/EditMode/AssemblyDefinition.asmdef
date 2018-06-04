@@ -1,0 +1,15 @@
+{
+    "name": "AssemblyDefinition",
+    "references": [
+        "umm@cafu_kvs",
+        "umm@cafu_core"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
