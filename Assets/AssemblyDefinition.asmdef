@@ -1,0 +1,11 @@
+{
+    "name": "umm@cafu_kvs",
+    "references": [
+        "umm@cafu_core",
+        "umm@extra_linq"
+    ],
+    "optionalUnityReferences": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false
+}
