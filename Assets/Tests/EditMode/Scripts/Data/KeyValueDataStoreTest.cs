@@ -39,6 +39,15 @@ namespace CAFU.KeyValueStore.Data.DataStore
             }
         }
 
+        class SampleScriptableEntity : ScriptableObject, IEntity
+        {
+            public SampleScriptableEntity()
+            {
+            }
+
+            public int Id;
+        }
+
         [SetUp]
         public void SetUp()
         {
@@ -68,6 +77,25 @@ namespace CAFU.KeyValueStore.Data.DataStore
             Assert.IsNotNull(result);
             Assert.AreEqual(1, result.Id);
             Assert.AreEqual("user1", result.Name);
+        }
+
+        [Test]
+        public void ScriptableObjectSaveLoadTest()
+        {
+            var entity = ScriptableObject.CreateInstance<SampleScriptableEntity>();
+            entity.Id = 1;
+            this.dataStore.SetEntity("key", entity);
+
+            Assert.IsFalse(File.Exists(DATA_PATH));
+            this.dataStore.Save();
+            Assert.IsTrue(File.Exists(DATA_PATH));
+
+            var dataStore2 = new CustomKeyValueDataStore();
+            dataStore2.Load();
+
+            var result = dataStore2.GetEntity<SampleScriptableEntity>("key");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Id);
         }
     }
 }
