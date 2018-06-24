@@ -5,53 +5,65 @@ using CAFU.Core.Data.Entity;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace CAFU.KeyValueStore.Data.DataStore {
-
-    public class KeyValueDataStoreTest {
-
+namespace CAFU.KeyValueStore.Data.DataStore
+{
+    public class KeyValueDataStoreTest
+    {
         private static readonly string DATA_PATH = Application.persistentDataPath + "/test.kv";
 
         private IKeyValueDataStore dataStore = new CustomKeyValueDataStore();
 
-        class CustomKeyValueDataStore : KeyValueDataStore {
-
-            public class Factory : DefaultDataStoreFactory<CustomKeyValueDataStore> {
-
+        class CustomKeyValueDataStore : KeyValueDataStore
+        {
+            public class Factory : DefaultDataStoreFactory<CustomKeyValueDataStore>
+            {
             }
 
-            protected override string CreatePath() {
+            protected override string CreatePath()
+            {
                 return DATA_PATH;
             }
-
         }
 
         [Serializable]
-        class SampleEntity : IEntity {
-
+        class SampleEntity : IEntity
+        {
             public int Id;
 
             public string Name;
 
-            public SampleEntity(int id, string name) {
+            public SampleEntity(int id, string name)
+            {
                 this.Id = id;
                 this.Name = name;
             }
+        }
 
+        class SampleScriptableEntity : ScriptableObject, IEntity
+        {
+            public SampleScriptableEntity()
+            {
+            }
+
+            public int Id;
         }
 
         [SetUp]
-        public void SetUp() {
+        public void SetUp()
+        {
             this.dataStore = new CustomKeyValueDataStore.Factory().Create();
             this.dataStore.Clear();
         }
 
         [TearDown]
-        public void TearDown() {
+        public void TearDown()
+        {
             this.dataStore.Clear();
         }
 
         [Test]
-        public void SaveLoadSetGetEntityTest() {
+        public void SaveLoadSetGetEntityTest()
+        {
             this.dataStore.SetEntity("key", new SampleEntity(1, "user1"));
 
             Assert.IsFalse(File.Exists(DATA_PATH));
@@ -67,6 +79,23 @@ namespace CAFU.KeyValueStore.Data.DataStore {
             Assert.AreEqual("user1", result.Name);
         }
 
-    }
+        [Test]
+        public void ScriptableObjectSaveLoadTest()
+        {
+            var entity = ScriptableObject.CreateInstance<SampleScriptableEntity>();
+            entity.Id = 1;
+            this.dataStore.SetEntity("key", entity);
 
+            Assert.IsFalse(File.Exists(DATA_PATH));
+            this.dataStore.Save();
+            Assert.IsTrue(File.Exists(DATA_PATH));
+
+            var dataStore2 = new CustomKeyValueDataStore();
+            dataStore2.Load();
+
+            var result = dataStore2.GetEntity<SampleScriptableEntity>("key");
+            Assert.IsNotNull(result);
+            Assert.AreEqual(1, result.Id);
+        }
+    }
 }

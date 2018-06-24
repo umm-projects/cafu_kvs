@@ -4,7 +4,6 @@ using CAFU.Core.Data.DataStore;
 using CAFU.Core.Data.Entity;
 using CAFU.KeyValueStore.Utility;
 using ExtraLinq;
-using UnityEngine;
 
 namespace CAFU.KeyValueStore.Data.DataStore
 {
@@ -43,6 +42,8 @@ namespace CAFU.KeyValueStore.Data.DataStore
         {
         }
 
+        public IStringDataSerializer Serializer { get; set; } = new JsonConvertSerializer();
+
         private KeyValueDictionary dictionary = new KeyValueDictionary();
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace CAFU.KeyValueStore.Data.DataStore
 
             // FIXME: 難読化する
             var text = File.ReadAllText(path);
-            this.dictionary = JsonUtility.FromJson<KeyValueDictionary>(text);
+            this.dictionary = this.Serializer.Deserialize<KeyValueDictionary>(text);
             this.dictionary.DeserializeSync();
         }
 
@@ -78,7 +79,7 @@ namespace CAFU.KeyValueStore.Data.DataStore
             }
 
             // FIXME: 難読化する
-            File.WriteAllText(path, JsonUtility.ToJson(this.dictionary));
+            File.WriteAllText(path, this.Serializer.Serialize(this.dictionary));
         }
 
         public void Clear()
@@ -100,14 +101,14 @@ namespace CAFU.KeyValueStore.Data.DataStore
                 return default(TEntity);
             }
 
-            var value = this.dictionary[key];
-            return JsonUtility.FromJson<TEntity>(value);
+            var text = this.dictionary[key];
+            return this.Serializer.Deserialize<TEntity>(text);
         }
 
         public void SetEntity<TEntity>(string key, TEntity entity) where TEntity : class, IEntity
         {
-            var value = JsonUtility.ToJson(entity);
-            this.dictionary[key] = value;
+            var text = this.Serializer.Serialize(entity);
+            this.dictionary[key] = text;
         }
     }
 
