@@ -42,7 +42,8 @@ namespace CAFU.KeyValueStore.Data.DataStore
         {
         }
 
-        public IStringDataSerializer Serializer { get; set; } = new JsonConvertSerializer();
+        // XXX: JsonConvertSerializer cannot serialize KeyValueDictionary on iOS (IL2CPP).
+        public IStringDataSerializer Serializer { get; set; } = new JsonUtilitySerializer();
 
         private KeyValueDictionary dictionary = new KeyValueDictionary();
 
