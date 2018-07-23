@@ -1,5 +1,5 @@
 {
-    "name": "AssemblyDefinition",
+    "name": "umm@cafu_kvs-Tests-EditMode",
     "references": [
         "umm@cafu_kvs",
         "umm@cafu_core"

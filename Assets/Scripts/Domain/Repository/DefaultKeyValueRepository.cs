@@ -9,6 +9,8 @@ namespace CAFU.KeyValueStore.Domain.Repository
     {
         TEntity GetEntity<TEntity>(string key) where TEntity : class, IEntity;
 
+        TEntity GetOrCreateEntity<TEntity>(string key) where TEntity : class, IEntity, new();
+
         void SetEntity<TEntity>(string key, TEntity value) where TEntity : class, IEntity;
 
         void Save();
@@ -41,9 +43,9 @@ namespace CAFU.KeyValueStore.Domain.Repository
                 throw new NotImplementedException("Please use Factory.Create(savePath)");
             }
 
-            public DefaultKeyValueRepository Create(string savePath)
+            public DefaultKeyValueRepository Create(string path)
             {
-                this.savePath = savePath;
+                savePath = path;
                 return base.Create();
             }
         }
@@ -52,22 +54,27 @@ namespace CAFU.KeyValueStore.Domain.Repository
 
         public TEntity GetEntity<TEntity>(string key) where TEntity : class, IEntity
         {
-            return this.DataStore.GetEntity<TEntity>(key);
+            return DataStore.GetEntity<TEntity>(key);
+        }
+
+        public TEntity GetOrCreateEntity<TEntity>(string key) where TEntity : class, IEntity, new()
+        {
+            return GetEntity<TEntity>(key) ?? new TEntity();
         }
 
         public void SetEntity<TEntity>(string key, TEntity value) where TEntity : class, IEntity
         {
-            this.DataStore.SetEntity(key, value);
+            DataStore.SetEntity(key, value);
         }
 
         public void Save()
         {
-            this.DataStore.Save();
+            DataStore.Save();
         }
 
         public void Load()
         {
-            this.DataStore.Load();
+            DataStore.Load();
         }
     }
 }

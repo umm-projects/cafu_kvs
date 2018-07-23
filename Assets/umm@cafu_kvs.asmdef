@@ -2,8 +2,7 @@
     "name": "umm@cafu_kvs",
     "references": [
         "umm@cafu_core",
-        "umm@extra_linq",
-        "umm@json_net"
+        "umm@extra_linq"
     ],
     "optionalUnityReferences": [],
     "includePlatforms": [],
