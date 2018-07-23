@@ -26,7 +26,6 @@
   "dependencies": {
     "@umm/cafu_core": "umm/cafu_core#^2.0.0",
     "@umm/extra_linq": "umm/extra_linq#^1.0.0",
-    "@umm/json_net": "umm/json_net#^1.0.0",
     "@umm/scripts": "umm/scripts#^1.0.0"
   },
   "devDependencies": {}
