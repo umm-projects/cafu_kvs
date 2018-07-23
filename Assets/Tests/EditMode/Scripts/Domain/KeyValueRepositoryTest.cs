@@ -1,10 +1,9 @@
 using System;
 using CAFU.Core.Data.Entity;
-using CAFU.KeyValueStore.Domain.Repository;
 using NUnit.Framework;
 using UnityEngine;
 
-namespace Tests.EditMode.Scripts.Domain
+namespace CAFU.KeyValueStore.Domain.Repository
 {
     public class KeyValueRepositoryTest
     {
@@ -83,10 +82,15 @@ namespace Tests.EditMode.Scripts.Domain
             {
                 KeyValueRepository.Load();
                 var entity = KeyValueRepository.GetEntity<SampleEntity>("key");
+                Assert.IsNull(entity);
+            }
+
+            {
+                KeyValueRepository.Load();
+                var entity = KeyValueRepository.GetOrCreateEntity<SampleEntity>("key");
                 Assert.IsNotNull(entity);
                 Assert.AreEqual(0, entity.Id);
-                // Will be empty string when saved
-                Assert.AreEqual(string.Empty, entity.Name);
+                Assert.AreEqual(null, entity.Name);
                 entity.Id = 1;
                 entity.Name = "foo";
 
