@@ -9,6 +9,8 @@ namespace CAFU.KeyValueStore.Domain.Repository
     {
         TEntity GetEntity<TEntity>(string key) where TEntity : class, IEntity;
 
+        TEntity GetOrCreateEntity<TEntity>(string key) where TEntity : class, IEntity, new();
+
         void SetEntity<TEntity>(string key, TEntity value) where TEntity : class, IEntity;
 
         void Save();
@@ -53,6 +55,13 @@ namespace CAFU.KeyValueStore.Domain.Repository
         public TEntity GetEntity<TEntity>(string key) where TEntity : class, IEntity
         {
             return DataStore.GetEntity<TEntity>(key);
+        }
+
+        public TEntity GetOrCreateEntity<TEntity>(string key) where TEntity : class, IEntity, new()
+        {
+            var entity = GetEntity<TEntity>(key) ?? new TEntity();
+            DataStore.SetEntity(key, entity);
+            return entity;
         }
 
         public void SetEntity<TEntity>(string key, TEntity value) where TEntity : class, IEntity
