@@ -59,9 +59,7 @@ namespace CAFU.KeyValueStore.Domain.Repository
 
         public TEntity GetOrCreateEntity<TEntity>(string key) where TEntity : class, IEntity, new()
         {
-            var entity = GetEntity<TEntity>(key) ?? new TEntity();
-            DataStore.SetEntity(key, entity);
-            return entity;
+            return GetEntity<TEntity>(key) ?? new TEntity();
         }
 
         public void SetEntity<TEntity>(string key, TEntity value) where TEntity : class, IEntity
